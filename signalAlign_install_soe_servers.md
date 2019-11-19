@@ -258,7 +258,6 @@ source ~/.bashrc_sa
 
 Now you can run:
 ```bash
-python3 runSignalAlign -h
 signalMachine
 ```
 
