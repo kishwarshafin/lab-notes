@@ -250,7 +250,7 @@ python3 -m pip install -e . --user
 # if this gives sonLib error then run make one more time, sonLib is just weird sometimes
 ```
 
-This should install SignalAlign in this directory: `/home/kishwar/signalalign_install/signalAlign/bin/`. You can make this globally execcible like other modules:
+This should install SignalAlign in this directory: `$HOME/signalalign_install/signalAlign/bin/`. You can make this globally accessible like other modules:
 ```bash
 echo "PATH=$HOME/signalalign_install/signalAlign/bin/:$PATH" >> ~/.bashrc_sa
 source ~/.bashrc_sa
