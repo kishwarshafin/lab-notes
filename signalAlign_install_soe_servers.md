@@ -8,7 +8,7 @@ This process takes forever and an hour to finish. I suggest running this in a sc
 screen -S signalalign_install
 ```
 
-## STEP 1: Install Anaconda
+## Step 1: Install Anaconda
 Because you don't have root privilege. **Make sure you have `wget, gcc,and bzip2` installed**. If not, then please ask the admin to install them. The UCSC SOE servers have them available for all users.
 
 ```bash
@@ -78,7 +78,7 @@ To verify the install, run:
 conda info
 ```
 
-## STEP 2: Set up environment variables
+## Step 2: Set up environment variables
 
 Set up the envoironment variables.
 #### Sanity check:
@@ -149,8 +149,8 @@ make install
 
 Now update the environment variable to make this samtools the default samtools.
 ```bash
-echo "PATH=$HOME/signalalign_install/samtools-1.9/bin/:$PATH" >> ~/.bashrc
-source ~/.bashrc
+echo "PATH=$HOME/signalalign_install/samtools-1.9/bin/:$PATH" >> ~/.bashrc_sa
+source ~/.bashrc_sa
 ```
 
 Verify the install by running:
@@ -171,8 +171,8 @@ make -j 16
 
 Now update the environment variable to make this samtools the default samtools.
 ```bash
-echo "PATH=$HOME/signalalign_install/bwa-0.7.17/:$PATH" >> ~/.bashrc
-source ~/.bashrc
+echo "PATH=$HOME/signalalign_install/bwa-0.7.17/:$PATH" >> ~/.bashrc_sa
+source ~/.bashrc_sa
 ```
 
 Verify the install by running:
@@ -196,8 +196,9 @@ make install
 
 Set it to default
 ```bash
-echo "PATH=$HOME/signalalign_install/Python-3.6.8/bin:$PATH" >> ~/.bashrc
-source ~/.bashrc
+echo "PATH=$HOME/signalalign_install/Python-3.6.8/bin:$PATH" >> ~/.bashrc_sa
+echo "alias python=python3" >> ~/.bashrc_sa
+source ~/.bashrc_sa
 ```
 Verify the install:
 ```bash
@@ -221,17 +222,29 @@ python3 -m pip uninstall python-dateutil
 python3 -m pip install python-dateutil==2.6.1
 ```
 
-## STEP 4: Finally, install SignalAlign
-#### NOTE:
-At this point you may need to terminate your connection to ssh and get back again if you get libssl errors for git. **Don't run `source ~/.bashrc_sa` until you are done cloning.**
-
+## Step 4: Finally, install SignalAlign
+#### Sanity check:
 ```bash
+source ~/.bashrc
+source ~/.bashrc_sa
+which samtools
+# should point to $HOME/signalalign_install/samtools-1.9/bin/samtools
+which bwa
+# should point to $HOME/signalalign_install/bwa/bwa
+which python
+# should point to $HOME/signalalign_install/Python-3.6.8/bin/python
+which python3
+# should point to $HOME/signalalign_install/Python-3.6.8/bin/python3
+gcc --version
+# should be 5.2
+```
+#### Install SignalAlign
+```bash
+source ~/.bashrc
+source ~/.bashrc_sa
 cd $HOME/signalalign_install
 git clone --recursive https://github.com/kishwarshafin/signalAlign.git
 cd signalAlign/
-source ~/.bashrc
-source ~/.bashrc_sa
-alias python=python3
 make
 python3 -m pip install -e . --user
 # if this gives sonLib error then run make one more time, sonLib is just weird sometimes
@@ -239,8 +252,8 @@ python3 -m pip install -e . --user
 
 This should install SignalAlign in this directory: `/home/kishwar/signalalign_install/signalAlign/bin/`. You can make this globally execcible like other modules:
 ```bash
-echo "PATH=$HOME/signalalign_install/signalAlign/bin/:$PATH" >> ~/.bashrc
-source ~/.bashrc
+echo "PATH=$HOME/signalalign_install/signalAlign/bin/:$PATH" >> ~/.bashrc_sa
+source ~/.bashrc_sa
 ```
 
 Now you can run:
@@ -248,3 +261,13 @@ Now you can run:
 python3 runSignalAlign -h
 signalMachine
 ```
+
+
+
+## Step 5: What happens when you log-out and then log back again
+Each time you log out of a server and then log in back again, your environment variables get reset. As we have used conda installed libraries instead of the globally installed ones, it is necessary to source the bash files each time you want to use `SignalAlign`. So, run:
+```bash
+source ~/.bashrc
+source ~/.bashrc_sa
+```
+Then all the path variables will be reset to what you had and you can run SignalAlign globally again.
